@@ -1,4 +1,4 @@
-#Diagrama de conexiones:
+# Diagrama de conexiones:
 
                   ----------------
 Sonda pH -------->│ Módulo pH    │
@@ -22,7 +22,7 @@ LED rojo + 220Ω <------| Pin 10    │
                        -------------
 
 
-#Diagrama de funcionamiento 
+# Diagrama de funcionamiento 
 
 Muestra de agua
        |
