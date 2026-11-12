@@ -14,5 +14,33 @@ Se estaba estabilizando pero por fin ya estaba en los parametros verdes
 <img width="257" height="265" alt="image" src="https://github.com/user-attachments/assets/868b9d45-dcf8-4632-8363-099aa5f26bcf" />
 
 
-#Modelo Inicial en Rihno
+# Modelo Inicial en Rihno
 <img width="724" height="545" alt="d3fb1231-221b-4b97-8864-126eea5f70e4" src="https://github.com/user-attachments/assets/6170e451-0a25-4af4-9360-7c5c6de2ae03" />
+
+
+# Modelo FInal en Rihno 
+
+<img width="439" height="496" alt="image" src="https://github.com/user-attachments/assets/6a470cd4-5480-4c19-912c-586e84dc3c91" />
+
+
+
+# Corte Laser 1
+Tuvimos problemas de medición
+
+<img width="734" height="542" alt="image" src="https://github.com/user-attachments/assets/3aebe593-3576-468c-95e5-4ac4296d2a5b" />
+
+Corte Laser 2
+
+<img width="1105" height="796" alt="image" src="https://github.com/user-attachments/assets/303e02c5-af2b-47ab-92bc-af786862da8b" />
+
+# Proceso de pegado 
+La silicona era difícil de trabajar, no se secaba rápido
+
+<img width="1200" height="1600" alt="image" src="https://github.com/user-attachments/assets/535a50a6-bfa2-4d62-aed8-71df26ba2e3d" />
+
+# Prueba de agua 
+
+<img width="900" height="1600" alt="image" src="https://github.com/user-attachments/assets/39df212f-c841-4199-98a0-a0431a1bccb9" />
+
+
+
