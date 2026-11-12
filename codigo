@@ -1,0 +1,49 @@
+const int pinPH = A1;
+const int pinTDS = A0;
+const int ledVerde = 8;
+const int ledAmarillo = 9;
+const int ledRojo = 10;
+const float VREF = 5.0;
+float temperatura = 25.0;
+float pendientePH = -8.07;
+float offsetPH = 27.18;
+float voltajeBasePH = 3.177;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(ledVerde, OUTPUT);
+  pinMode(ledAmarillo, OUTPUT);
+  pinMode(ledRojo, OUTPUT);
+}
+
+void loop() {
+  int lecturaPH = analogRead(pinPH);
+  float voltajePH = lecturaPH * VREF / 1023.0;
+  float ph = pendientePH * voltajePH + offsetPH;
+
+  int lecturaTDS = analogRead(pinTDS);
+  float voltajeTDS = lecturaTDS * VREF / 1023.0;
+  float compensacion = 1.0 + 0.02 * (temperatura - 25.0);
+  float voltajeCompensado = voltajeTDS / compensacion;
+  float TDS = (133.42 * voltajeCompensado * voltajeCompensado * voltajeCompensado - 255.86 * voltajeCompensado * voltajeCompensado + 857.39 * voltajeCompensado) * 0.5;
+
+  Serial.print("pH: ");
+  Serial.print(ph, 2);
+  Serial.print(" | TDS: ");
+  Serial.print(TDS, 0);
+  Serial.println(" ppm");
+
+  digitalWrite(ledVerde, LOW);
+  digitalWrite(ledAmarillo, LOW);
+  digitalWrite(ledRojo, LOW);
+
+  if (ph >= 6 && ph <= 7.5 && TDS <= 700) {
+    digitalWrite(ledVerde, HIGH);
+  } else if (ph >= 5.5 && ph <= 8.5 && TDS <= 1000) {
+    digitalWrite(ledAmarillo, HIGH);
+  } else {
+    digitalWrite(ledRojo, HIGH);
+  }
+
+  delay(1000);
+}
