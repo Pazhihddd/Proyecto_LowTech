@@ -38,4 +38,20 @@ Compara con los valores de referencia
  |      |        |
 verde amarillo   rojo
 
+# Diagrama de flujo
 
+ A([Inicio]) --> B["Inicializar Puerto Serie (9600 bps)"]
+    B --> C["Configurar pines LED como OUTPUT"]
+    C --> D["Leer pines analógicos<br/>(pH en A1, TDS en A0)"]
+    D --> E["Calcular voltajes y fórmulas<br/>(pH y compensación TDS)"]
+    E --> F["Imprimir valores en Monitor Serie"]
+    F --> G["Apagar todos los LEDs (LOW)"]
+    G --> H{"¿pH entre 6.0 y 7.5<br/>Y TDS <= 700?"}
+    H -- Sí --> I["Encender LED Verde (HIGH)"]
+    H -- No --> J{"¿pH entre 5.5 y 8.5<br/>Y TDS <= 1000?"}
+    J -- Sí --> K["Encender LED Amarillo (HIGH)"]
+    J -- No --> L["Encender LED Rojo (HIGH)"]
+    I --> M["Esperar 1 segundo (delay 1000)"]
+    K --> M
+    L --> M
+    M --> D
