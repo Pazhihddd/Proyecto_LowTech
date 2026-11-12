@@ -1,0 +1,41 @@
+Diagrama de conexiones:
+
+                  ----------------
+Sonda pH -------->│ Módulo pH    │
+                  │ PO ----------┼----> A1
+                  │ V+ ----------┼----> 5V
+                  │ G  ----------┼----> GND
+                  ----------------
+
+                  ----------------
+Sonda TDS ------->| Módulo TDS   │
+                  │ A -----------┼----> A0
+                  │ + -----------┼----> 5V
+                  │ - -----------┼----> GND
+                  ----------------
+
+                        ARDUINO UNO
+                       -------------
+LED verde + 220Ω <-----| Pin 8     │
+LED amarillo + 220Ω <--| Pin 9     │
+LED rojo + 220Ω <------| Pin 10    │
+                       -------------
+
+
+Diagrama de funcionamiento 
+
+Muestra de agua
+       |
+Sondas pH + TDS
+       |
+Arduino recibe las lecturas
+       |
+Compara con los valores de referencia
+      |
+  ¿Hay cambios?
+   /    |    \
+ NO   MEDIO   ALTO
+ |      |        |
+verde amarillo   rojo
+
+
