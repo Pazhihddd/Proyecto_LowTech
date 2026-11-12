@@ -1,4 +1,5 @@
-# Diagrama de conexiones:
+/*
+Diagrama de conexiones:
 
                   ----------------
 Sonda pH -------->│ Módulo pH    │
@@ -55,3 +56,6 @@ verde amarillo   rojo
     K --> M
     L --> M
     M --> D
+
+
+*/
