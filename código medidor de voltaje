@@ -1,0 +1,22 @@
+const int pinPH = A1;
+
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+
+  int lecturaPH = analogRead(pinPH);
+
+  float voltajePH = lecturaPH * 5.0 / 1023.0;
+
+  Serial.print("Lectura pH: ");
+  Serial.print(lecturaPH);
+
+  Serial.print(" | Voltaje: ");
+  Serial.print(voltajePH, 3);
+
+  Serial.println(" V");
+
+  delay(500);
+ }
