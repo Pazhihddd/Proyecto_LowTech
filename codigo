@@ -1,49 +1,49 @@
-const int pinPH = A1;
-const int pinTDS = A0;
-const int ledVerde = 8;
-const int ledAmarillo = 9;
-const int ledRojo = 10;
-const float VREF = 5.0;
-float temperatura = 25.0;
-float pendientePH = -8.07;
-float offsetPH = 27.18;
-float voltajeBasePH = 3.177;
+const int pinPH = A1;                 // sensor de pH
+const int pinTDS = A0;                // sensor de TDS
+const int ledVerde = 8;               // led verde: agua ok
+const int ledAmarillo = 9;            // led amarillo: agua regular
+const int ledRojo = 10;               // led rojo: agua mala
+const float VREF = 5.0;               // el Arduino trabaja a 5 V
+float temperatura = 25.0;             // por ahora la temperatura va fija
+float pendientePH = -8.07;            // datos de la calibración del pH
+float offsetPH = 27.18;               // (los saqué con las soluciones buffer)
+float voltajeBasePH = 3.177;          // esto al final no lo uso
 
 void setup() {
-  Serial.begin(9600);
-  pinMode(ledVerde, OUTPUT);
+  Serial.begin(9600);                 // para ver los datos en el monitor serial
+  pinMode(ledVerde, OUTPUT);          // los tres leds son salidas
   pinMode(ledAmarillo, OUTPUT);
   pinMode(ledRojo, OUTPUT);
 }
 
 void loop() {
-  int lecturaPH = analogRead(pinPH);
-  float voltajePH = lecturaPH * VREF / 1023.0;
-  float ph = pendientePH * voltajePH + offsetPH;
+  int lecturaPH = analogRead(pinPH);                  // leo el pH (valor de 0 a 1023)
+  float voltajePH = lecturaPH * VREF / 1023.0;        // lo paso a voltios
+  float ph = pendientePH * voltajePH + offsetPH;      // y de voltios a pH con la recta
 
-  int lecturaTDS = analogRead(pinTDS);
-  float voltajeTDS = lecturaTDS * VREF / 1023.0;
-  float compensacion = 1.0 + 0.02 * (temperatura - 25.0);
-  float voltajeCompensado = voltajeTDS / compensacion;
-  float TDS = (133.42 * voltajeCompensado * voltajeCompensado * voltajeCompensado - 255.86 * voltajeCompensado * voltajeCompensado + 857.39 * voltajeCompensado) * 0.5;
+  int lecturaTDS = analogRead(pinTDS);                // lo mismo para el TDS
+  float voltajeTDS = lecturaTDS * VREF / 1023.0;      // a voltios
+  float compensacion = 1.0 + 0.02 * (temperatura - 25.0);   // corrección por temperatura
+  float voltajeCompensado = voltajeTDS / compensacion;       // aplico la corrección al voltaje
+  float TDS = (133.42 * voltajeCompensado * voltajeCompensado * voltajeCompensado - 255.86 * voltajeCompensado * voltajeCompensado + 857.39 * voltajeCompensado) * 0.5;   // fórmula del fabricante, da ppm
 
-  Serial.print("pH: ");
+  Serial.print("pH: ");                // muestro todo en el monitor serial
   Serial.print(ph, 2);
   Serial.print(" | TDS: ");
   Serial.print(TDS, 0);
   Serial.println(" ppm");
 
-  digitalWrite(ledVerde, LOW);
+  digitalWrite(ledVerde, LOW);        // apago todos los leds antes de decidir cuál prender
   digitalWrite(ledAmarillo, LOW);
   digitalWrite(ledRojo, LOW);
 
-  if (ph >= 6 && ph <= 7.5 && TDS <= 700) {
+  if (ph >= 6 && ph <= 7.5 && TDS <= 700) {              // todo en rango ideal: verde
     digitalWrite(ledVerde, HIGH);
-  } else if (ph >= 5.5 && ph <= 8.5 && TDS <= 1000) {
+  } else if (ph >= 5.5 && ph <= 8.5 && TDS <= 1000) {    // aceptable pero no ideal: amarillo
     digitalWrite(ledAmarillo, HIGH);
-  } else {
+  } else {                                               // fuera de todo: rojo
     digitalWrite(ledRojo, HIGH);
   }
 
-  delay(1000);
+  delay(1000);                        // una medición por segundo
 }
