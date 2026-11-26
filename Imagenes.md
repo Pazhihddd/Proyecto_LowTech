@@ -42,5 +42,15 @@ La silicona era difícil de trabajar, no se secaba rápido
 
 <img width="900" height="1600" alt="image" src="https://github.com/user-attachments/assets/39df212f-c841-4199-98a0-a0431a1bccb9" />
 
+# Cables instalados por den 
+
+<img width="1200" height="1600" alt="image" src="https://github.com/user-attachments/assets/5c193c27-8f61-4d6f-8553-4ea302ee44c5" />
+
+# Prueba final tro
+
+<img width="1200" height="1600" alt="image" src="https://github.com/user-attachments/assets/3a58df7b-2389-4047-b1c3-4521ddfb03c8" />
+
+
+
 
 
