@@ -29,3 +29,8 @@ Aún no se corrige la pieza de luces y cables
 # Cuadrado pequeño con agua
 
 <img width="900" height="1600" alt="image" src="https://github.com/user-attachments/assets/5e2c7cc1-9e57-4a09-8e91-1eb55333776b" />
+
+
+# Sistema en la caja 
+
+<img width="1200" height="1600" alt="image" src="https://github.com/user-attachments/assets/98f83027-8130-441a-b58b-3652319ee44b" />
