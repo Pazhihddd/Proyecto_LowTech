@@ -6,7 +6,7 @@ const int ledRojo = 10;        // Pin digital 10 para el LED rojo (calidad mala)
 const float VREF = 5.0;        // Voltaje de referencia del ADC de Arduino (5 V)
 float temperatura = 25.0;      // Temperatura del agua en °C (valor fijo, usado para compensar el TDS)
 float pendientePH = -8.07;     // Pendiente de la recta de calibración del sensor de pH
-float offsetPH = 29.70;        // Ordenada al origen (offset) de la recta de calibración del pH
+float offsetPH = 27.70;        // Ordenada al origen (offset) de la recta de calibración del pH 
 float voltajeBasePH = 3.177;   // Voltaje de referencia medido en calibración (no se usa en el cálculo actual)
 
 void setup() {                       // Función que se ejecuta una sola vez al encender o reiniciar la placa
