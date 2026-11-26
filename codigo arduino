@@ -1,49 +1,49 @@
-const int pinPH = A1;                 // sensor de pH
-const int pinTDS = A0;                // sensor de TDS
-const int ledVerde = 8;               // led verde: agua ok
-const int ledAmarillo = 9;            // led amarillo: agua regular
-const int ledRojo = 10;               // led rojo: agua mala
-const float VREF = 5.0;               // el Arduino trabaja a 5 V
-float temperatura = 25.0;             // por ahora la temperatura va fija
-float pendientePH = -8.07;            // datos de la calibración del pH
-float offsetPH = 27.18;               // (los saqué con las soluciones buffer)
-float voltajeBasePH = 3.177;          // esto al final no lo uso
+const int pinPH = A1;          // Pin analógico A1 donde se conecta el sensor de pH
+const int pinTDS = A0;         // Pin analógico A0 donde se conecta el sensor de TDS
+const int ledVerde = 8;        // Pin digital 8 para el LED verde (agua de buena calidad)
+const int ledAmarillo = 9;     // Pin digital 9 para el LED amarillo (calidad aceptable / precaución)
+const int ledRojo = 10;        // Pin digital 10 para el LED rojo (calidad mala)
+const float VREF = 5.0;        // Voltaje de referencia del ADC de Arduino (5 V)
+float temperatura = 25.0;      // Temperatura del agua en °C (valor fijo, usado para compensar el TDS)
+float pendientePH = -8.07;     // Pendiente de la recta de calibración del sensor de pH
+float offsetPH = 29.70;        // Ordenada al origen (offset) de la recta de calibración del pH
+float voltajeBasePH = 3.177;   // Voltaje de referencia medido en calibración (no se usa en el cálculo actual)
 
-void setup() {
-  Serial.begin(9600);                 // para ver los datos en el monitor serial
-  pinMode(ledVerde, OUTPUT);          // los tres leds son salidas
-  pinMode(ledAmarillo, OUTPUT);
-  pinMode(ledRojo, OUTPUT);
-}
+void setup() {                       // Función que se ejecuta una sola vez al encender o reiniciar la placa
+  Serial.begin(9600);                // Inicia la comunicación serie a 9600 baudios para mostrar datos en el monitor serie
+  pinMode(ledVerde, OUTPUT);         // Configura el pin del LED verde como salida
+  pinMode(ledAmarillo, OUTPUT);      // Configura el pin del LED amarillo como salida
+  pinMode(ledRojo, OUTPUT);          // Configura el pin del LED rojo como salida
+}                                    // Fin de setup()
 
-void loop() {
-  int lecturaPH = analogRead(pinPH);                  // leo el pH (valor de 0 a 1023)
-  float voltajePH = lecturaPH * VREF / 1023.0;        // lo paso a voltios
-  float ph = pendientePH * voltajePH + offsetPH;      // y de voltios a pH con la recta
+void loop() {                                                  // Función que se repite continuamente
+  int lecturaPH = analogRead(pinPH);                           // Lee el valor crudo (0-1023) del sensor de pH
+  float voltajePH = lecturaPH * VREF / 1023.0;                 // Convierte la lectura del ADC a voltaje (0-5 V)
+  float ph = pendientePH * voltajePH + offsetPH;               // Calcula el pH con la recta de calibración: pH = pendiente * voltaje + offset
 
-  int lecturaTDS = analogRead(pinTDS);                // lo mismo para el TDS
-  float voltajeTDS = lecturaTDS * VREF / 1023.0;      // a voltios
-  float compensacion = 1.0 + 0.02 * (temperatura - 25.0);   // corrección por temperatura
-  float voltajeCompensado = voltajeTDS / compensacion;       // aplico la corrección al voltaje
-  float TDS = (133.42 * voltajeCompensado * voltajeCompensado * voltajeCompensado - 255.86 * voltajeCompensado * voltajeCompensado + 857.39 * voltajeCompensado) * 0.5;   // fórmula del fabricante, da ppm
+  int lecturaTDS = analogRead(pinTDS);                         // Lee el valor crudo (0-1023) del sensor de TDS
+  float voltajeTDS = lecturaTDS * VREF / 1023.0;               // Convierte la lectura del ADC a voltaje (0-5 V)
+  float compensacion = 1.0 + 0.02 * (temperatura - 25.0);      // Coeficiente de compensación por temperatura (2 % por cada °C respecto a 25 °C)
+  float voltajeCompensado = voltajeTDS / compensacion;         // Corrige el voltaje del TDS según la temperatura del agua
+  float TDS = (133.42 * voltajeCompensado * voltajeCompensado * voltajeCompensado - 255.86 * voltajeCompensado * voltajeCompensado + 857.39 * voltajeCompensado) * 0.5;  // Polinomio cúbico que convierte el voltaje compensado en ppm de sólidos disueltos (el factor 0.5 pasa de conductividad a TDS)
 
-  Serial.print("pH: ");                // muestro todo en el monitor serial
-  Serial.print(ph, 2);
-  Serial.print(" | TDS: ");
-  Serial.print(TDS, 0);
-  Serial.println(" ppm");
+  Serial.print("pH: ");                                        // Imprime la etiqueta "pH: " en el monitor serie
+  Serial.print(ph, 2);                                         // Imprime el valor del pH con 2 decimales
+  Serial.print(" | TDS: ");                                    // Imprime un separador y la etiqueta "TDS: "
+  Serial.print(TDS, 0);                                        // Imprime el valor del TDS sin decimales
+  Serial.println(" ppm");                                      // Imprime la unidad "ppm" y salta a la línea siguiente
 
-  digitalWrite(ledVerde, LOW);        // apago todos los leds antes de decidir cuál prender
-  digitalWrite(ledAmarillo, LOW);
-  digitalWrite(ledRojo, LOW);
+  digitalWrite(ledVerde, LOW);                                 // Apaga el LED verde antes de evaluar el estado
+  digitalWrite(ledAmarillo, LOW);                              // Apaga el LED amarillo antes de evaluar el estado
+  digitalWrite(ledRojo, LOW);                                  // Apaga el LED rojo antes de evaluar el estado
 
-  if (ph >= 6 && ph <= 7.5 && TDS <= 700) {              // todo en rango ideal: verde
-    digitalWrite(ledVerde, HIGH);
-  } else if (ph >= 5.5 && ph <= 8.5 && TDS <= 1000) {    // aceptable pero no ideal: amarillo
-    digitalWrite(ledAmarillo, HIGH);
-  } else {                                               // fuera de todo: rojo
-    digitalWrite(ledRojo, HIGH);
-  }
+  if (ph >= 6 && ph <= 7.5 && TDS <= 700) {                    // Si el pH está entre 6 y 7.5 Y el TDS es como máximo 700 ppm: calidad buena
+    digitalWrite(ledVerde, HIGH);                              // Enciende el LED verde
+  } else if (ph >= 5.5 && ph <= 8.5 && TDS <= 1000) {          // Si no, pero el pH está entre 5.5 y 8.5 Y el TDS es como máximo 1000 ppm: calidad aceptable
+    digitalWrite(ledAmarillo, HIGH);                           // Enciende el LED amarillo
+  } else {                                                     // En cualquier otro caso: calidad mala
+    digitalWrite(ledRojo, HIGH);                               // Enciende el LED rojo
+  }                                                            // Fin de la estructura condicional
 
-  delay(1000);                        // una medición por segundo
-}
+  delay(1000);                                                 // Espera 1 segundo antes de la siguiente medición
+}                                                              // Fin de loop()
