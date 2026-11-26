@@ -26,3 +26,11 @@ Los valores aproximados obtenidos una vez la máquna se calibró son:
 - Leche
   TDS: 532
   pH: 5.58
+
+  ### Última prueba
+<img width="1200" height="1600" alt="image" src="https://github.com/user-attachments/assets/d4e45481-3c0f-4023-8833-9eb745a5bb1e" />
+
+- Agua Destilada
+  TDS: 8
+  pH: 6.94
+  
